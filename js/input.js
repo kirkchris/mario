@@ -16,6 +16,8 @@
             key = 'RIGHT'; break;
         case 40:
             key = 'DOWN'; break;
+        case 13:
+            key = 'ENTER'; break;
         case 88:
             key = 'JUMP'; break;
         case 90:

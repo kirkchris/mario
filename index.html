@@ -1,17 +1,31 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-
-    <!-- The actual resolution of the NES is 256x240.
-         Ideally, we draw in this size and scale appropriately.-->
-    <title>Super Mario Bros</title>
+    <title>NintenJoe | Super Joe</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/game.css">
   </head>
   <body>
+    <div id="game-container"></div>
+    <aside class="controls-panel">
+      <div class="controls-panel__inner">
+        <h2 class="controls-panel__title">How to Play</h2>
+        <ul class="controls-panel__list">
+          <li><span class="key">← →</span> Move</li>
+          <li><span class="key">↑</span> Look up</li>
+          <li><span class="key">↓</span> Crouch / Enter pipe</li>
+          <li><span class="key">X</span> Jump</li>
+          <li><span class="key">Z</span> Run / Fireball</li>
+        </ul>
+      </div>
+    </aside>
+
     <script type="text/javascript" src="js/util.js"></script>
     <script type="text/javascript" src="js/input.js"></script>
     <script type="text/javascript" src="js/resources.js"></script>
@@ -36,9 +50,5 @@
     <script type="text/javascript" src="js/levels/11.js"></script>
     <script type="text/javascript" src="js/levels/11tunnel.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
-    <div class="info">
-      <p class="controls">Move: Arrow Keys, Jump: X, Run: Z</p>
-      <div class="links">My Links <br><a href="http://garrettjohnson.net">Portfolio</a> <a href="http://linkedin.com/in/garretttjohnson">LinkedIn</a> <a href="https://github.com/reruns">github</a><div>
-    </div>
   </body>
 </html>

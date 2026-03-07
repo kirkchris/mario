@@ -24,7 +24,8 @@ var player = new Mario.Player([0,0]);
 canvas.width = 762;
 canvas.height = 720;
 ctx.scale(3,3);
-document.body.appendChild(canvas);
+var gameContainer = document.getElementById('game-container');
+(gameContainer || document.body).appendChild(canvas);
 
 //viewport
 var vX = 0,
@@ -40,6 +41,7 @@ resources.load([
   'sprites/playerl.png',
   'sprites/items.png',
   'sprites/enemyr.png',
+  'sprites/logo.png',
 ]);
 
 resources.onReady(init);
@@ -76,6 +78,14 @@ function init() {
 }
 
 var gameTime = 0;
+var splashDismissed = false;
+var splashFadeStart = null; // when set, splash is fading out over 1s
+
+function isSplashActive() {
+  if (!splashDismissed) return true;
+  if (splashFadeStart !== null && gameTime < splashFadeStart + 1) return true;
+  return false;
+}
 
 //set up the game loop
 function main() {
@@ -99,6 +109,13 @@ function update(dt) {
 }
 
 function handleInput(dt) {
+  if (isSplashActive()) {
+    if (!splashDismissed && input.isDown('ENTER')) {
+      splashDismissed = true;
+      splashFadeStart = gameTime;
+    }
+    return;
+  }
   if (player.piping || player.dying || player.noInput) return; //don't accept input
 
   if (input.isDown('RUN')){
@@ -234,6 +251,70 @@ function render() {
   level.pipes.forEach (function(pipe) {
     renderEntity(pipe);
   });
+
+  // Level complete: show JOE WINS! when Mario has reached the castle
+  if (player.exiting && player.pos[0] >= level.exit * 16) {
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // draw in screen pixels for text
+    var cx = canvas.width / 2;
+    var cy = canvas.height / 2;
+    ctx.font = 'bold 48px "Press Start 2P", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle = '#8c8c8c';
+    ctx.lineWidth = 4;
+    ctx.strokeText('JOE WINS!', cx, cy);
+    ctx.fillStyle = '#e60012';
+    ctx.fillText('JOE WINS!', cx, cy);
+    ctx.restore();
+  }
+
+  // Death: show GAME OVER, JOE! while death animation plays
+  if (player.dying) {
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    var cx = canvas.width / 2;
+    var cy = canvas.height / 2;
+    ctx.font = 'bold 36px "Press Start 2P", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle = '#8c8c8c';
+    ctx.lineWidth = 4;
+    ctx.strokeText('GAME OVER, JOE!', cx, cy);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('GAME OVER, JOE!', cx, cy);
+    ctx.restore();
+  }
+
+  // Splash screen: logo + "START GAME" + "PRESS ENTER"; stays until Enter, then fades out over 1s
+  if (isSplashActive()) {
+    var splashOpacity = splashFadeStart !== null
+      ? Math.max(0, splashFadeStart + 1 - gameTime)
+      : 1;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = splashOpacity;
+    ctx.fillStyle = '#71B4DE';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    var logoImg = resources.get('sprites/logo.png');
+    if (logoImg && logoImg.complete) {
+      var logoW = logoImg.naturalWidth;
+      var logoH = logoImg.naturalHeight;
+      var cx = canvas.width / 2;
+      var logoY = canvas.height / 2 - logoH / 2 - 40;
+      ctx.drawImage(logoImg, cx - logoW / 2, logoY, logoW, logoH);
+    }
+    ctx.font = 'bold 24px "Press Start 2P", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('START GAME', canvas.width / 2, canvas.height / 2 + 60);
+    ctx.font = 'bold 14px "Press Start 2P", monospace';
+    ctx.fillStyle = '#65C385';
+    ctx.fillText('PRESS ENTER', canvas.width / 2, canvas.height / 2 + 100);
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
 }
 
 function renderEntity(entity) {

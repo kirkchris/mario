@@ -2,6 +2,8 @@
 	if (typeof Mario === 'undefined')
 		window.Mario = {};
 
+	var PLAYER_SCALE = 1842 / 416; // ~4.428 — ratio of new to old sprite sheet width
+
 	var Player = Mario.Player = function(pos) {
 		//I know, I know, there are a lot of variables tracking Mario's state.
 		//Maybe these can be consolidated some way? We'll see once they're all in.
@@ -20,7 +22,7 @@
 
 		Mario.Entity.call(this, {
 			pos: pos,
-			sprite: new Mario.Sprite('sprites/player.png', [80,32],[16,16],0),
+			sprite: new Mario.Sprite('sprites/player.png', [80,32], [16,16], 0, undefined, undefined, PLAYER_SCALE),
 			hitbox: [0,0,16,16]
 		});
 	};

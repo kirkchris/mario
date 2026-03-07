@@ -2,7 +2,7 @@
   if (typeof Mario === 'undefined')
     window.Mario = {};
 
-  var Sprite = Mario.Sprite = function(img, pos, size, speed, frames, once) {
+  var Sprite = Mario.Sprite = function(img, pos, size, speed, frames, once, scale) {
     this.pos = pos;
     this.size = size;
     this.speed = speed;
@@ -10,6 +10,7 @@
     this.img = img;
     this.once = once;
     this.frames = frames;
+    this.scale = scale || 1;
   }
 
   Sprite.prototype.update = function(dt, gameTime) {
@@ -42,6 +43,15 @@
     var y = this.pos[1];
 
     x += frame*this.size[0];
-    ctx.drawImage(resources.get(this.img), x + (1/3),y + (1/3), this.size[0] - (2/3), this.size[1] - (2/3), Math.round(posx - vX), Math.round(posy - vY), this.size[0],this.size[1]);
+
+    var s = this.scale;
+    var sx = Math.round(x * s);
+    var sy = Math.round(y * s);
+    var sw = Math.round((x + this.size[0]) * s) - sx;
+    var sh = Math.round((y + this.size[1]) * s) - sy;
+    ctx.drawImage(resources.get(this.img),
+      sx, sy, sw, sh,
+      Math.round(posx - vX), Math.round(posy - vY),
+      this.size[0], this.size[1]);
   }
 })();
