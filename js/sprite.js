@@ -26,7 +26,7 @@
   Sprite.prototype.render = function(ctx, posx, posy, vX, vY) {
     var frame;
 
-    if (this.speed > 0) {
+    if (this.speed > 0 && this.frames && this.frames.length > 0) {
       var max = this.frames.length;
       var idx = Math.floor(this._index);
       frame = this.frames[idx % max];
@@ -42,7 +42,7 @@
     var x = this.pos[0];
     var y = this.pos[1];
 
-    x += frame*this.size[0];
+    x += frame * this.size[0];
 
     var s = this.scale;
     var sx = Math.round(x * s);

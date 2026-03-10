@@ -31,8 +31,11 @@ var oneone = Mario.oneone = function() {
     pipeLeft: new Mario.Sprite('sprites/tiles.png', [32, 128], [16,32], 0),
     pipeTop: new Mario.Sprite('sprites/tiles.png', [0, 128], [32,16], 0),
     qblockSprite: new Mario.Sprite('sprites/tiles.png', [384, 0], [16,16], 8, [0,0,0,0,1,2,1]),
+    coinSprite: function() {
+      return new Mario.Sprite('sprites/coin.png', [0,0],[16,16], 0);
+    },
     bcoinSprite: function() {
-      return new Mario.Sprite('sprites/items.png', [0,112],[16,16], 20,[0,1,2,3]);
+      return new Mario.Sprite('sprites/coin.png', [0,0],[16,16], 0);
     },
     cloudSprites:[
       new Mario.Sprite('sprites/tiles.png', [0,320],[16,32],0),
@@ -113,6 +116,22 @@ var oneone = Mario.oneone = function() {
   threeBushes = [11,59,106];
   threeBushes.forEach(function(bush) {
     level.putThreeBush(bush, 12);
+  });
+
+  // ground coins (rows in overworld)
+  groundCoins = [
+    [18, 9], [19, 9], [20, 9],
+    [36, 9], [37, 9], [38, 9], [39, 9],
+    [52, 9], [53, 9], [54, 9],
+    [77, 9], [78, 9], [79, 9],
+    [91, 5], [92, 5], [93, 5],
+    [100, 9], [101, 9], [102, 9],
+    [117, 9], [118, 9], [119, 9],
+    [128, 5], [129, 5], [130, 5],
+    [168, 9], [169, 9], [170, 9]
+  ];
+  groundCoins.forEach(function(pos) {
+    level.putCoin(pos[0], pos[1]);
   });
 
   //interactable terrain

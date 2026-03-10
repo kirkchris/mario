@@ -42,6 +42,7 @@ resources.load([
   'sprites/items.png',
   'sprites/enemyr.png',
   'sprites/logo.png',
+  'sprites/coin.png',
 ]);
 
 resources.onReady(init);
@@ -163,7 +164,7 @@ function updateEntities(dt, gameTime) {
 
   if (player.powering.length !== 0 || player.dying) { return; }
   level.items.forEach (function(ent) {
-    ent.update(dt);
+    if (ent) ent.update(dt);
   });
 
   level.enemies.forEach (function(ent) {
@@ -214,9 +215,9 @@ function render() {
     }
   }
 
-  //then items
+  //then items (skip holes left by delete level.items[idx])
   level.items.forEach (function (item) {
-    renderEntity(item);
+    if (item) renderEntity(item);
   });
 
   level.enemies.forEach (function(enemy) {
@@ -284,6 +285,25 @@ function render() {
     ctx.fillStyle = '#ffffff';
     ctx.fillText('GAME OVER, JOE!', cx, cy);
     ctx.restore();
+  }
+
+  // NintenJoe logo at top center during gameplay
+  if (!isSplashActive()) {
+    var logoImg = resources.get('sprites/logo.png');
+    if (logoImg && logoImg.complete) {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      var maxLogoW = 140;
+      var logoW = logoImg.naturalWidth;
+      var logoH = logoImg.naturalHeight;
+      var scale = logoW > maxLogoW ? maxLogoW / logoW : 1;
+      var drawW = logoW * scale;
+      var drawH = logoH * scale;
+      var logoX = (canvas.width - drawW) / 2;
+      var logoY = 8;
+      ctx.drawImage(logoImg, 0, 0, logoW, logoH, logoX, logoY, drawW, drawH);
+      ctx.restore();
+    }
   }
 
   // Splash screen: logo + "START GAME" + "PRESS ENTER"; stays until Enter, then fades out over 1s

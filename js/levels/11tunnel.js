@@ -5,7 +5,7 @@ var oneonetunnel = Mario.oneonetunnel = function() {
     background: "#000000",
     scrolling: false,
     coinSprite: function() {
-      return new Mario.Sprite('sprites/items.png', [0,96],[16,16], 6,[0,0,0,0,1,2,1]);
+      return new Mario.Sprite('sprites/coin.png', [0,0],[16,16], 0);
     },
     floorSprite:  new Mario.Sprite('sprites/tiles.png', [0,32],[16,16],0),
     wallSprite: new Mario.Sprite('sprites/tiles.png', [32, 32],[16,16],0),
